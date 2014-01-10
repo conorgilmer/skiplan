@@ -1,0 +1,29 @@
+
+ski planner
+to calculate a ski holiday
+
+Costs
+Flights
+Transfer from Airport
+- Airport Taxi
+- Public Transport
+- Car Hire
+Accommodation
+- How Long (nights)
+- Pension
+- Hotel
+- Self
+Ski Pass
+- How Long (days)
+Ski Equipment
+- How long (days)
+- skis
+- boots
+- helmet
+- clothing
+Serivces
+- Lessons
+- Guide (Hour Rate)
+Insurance
+- Travel 
+- Extreme Sports
