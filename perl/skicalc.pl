@@ -1,7 +1,11 @@
 #!usr/bin/perl
 # ------------------------------------- #
-# skicalc.pl                            #
+#          skicalc.pl                   #
+#                                       #
 # Calculate the costs for a ski trip    #
+# you can write it to a csv file and    #
+# see previous trips you saved          #   
+#                                       #
 # Conor Gilmer (conor.gilmer@gmail.com) #
 # ------------------------------------- #
 
@@ -14,7 +18,7 @@ sub quest {
     my $answer = 0;
     print " Cost of ", $questtext, "? ";
     $answer = <>;
-}
+} # end of quest
 
 # ------ write the details to a file -- #
 sub writeRecord {
@@ -33,7 +37,7 @@ sub writeRecord {
     print $fh $text.",".$f.",".$t.",".$a.",".$sp.",".$sh.",".$i.",".$l.",".$cost.",\n";
     close $fh;
     print "record written to $filename \n";
-}
+} # end of writeRecord
 
 # ------ read the ski holidays file ---- #
 sub readFile {
@@ -49,7 +53,7 @@ print "\n\n *** Contents of $filename ***\n\n";
                 }
         close(FILE);
 print "\n *****************************\n";
-}
+} # end of readFile
 
 # ------ show the list of holidays ? -- #
 sub showRecords { 
@@ -62,7 +66,7 @@ sub showRecords {
     } else {
         print "\nFile not printed\n";
     }
-}
+} # end of showRecords
 
 # -------- add a ski holiday ---------- #
 sub addSkiHoliday {
@@ -108,45 +112,32 @@ sub addSkiHoliday {
     } else {
         print "\nRecord not printed\n";
     }
-}
+} # end of addSkiHoliday
 
-# ------ show the list of holidays ? -- #
-sub showRecords { 
-# do you wish to write this to a file   #
-    print "\n Do you want to see the records of holidays (y or n)? ";
-    my $showrecords = <>;
-    chomp($showrecords);
-    if( $showrecords eq "y") {
-        readFile("skihols.txt");
-    } else {
-        print "\nFile not printed\n";
-    }
-}
 
 
 $choice =9;
 # ------ main function ---------------- #
 while ($choice ne "0") {
-print "\n *****************************";
-print "\n *                           *";
-print "\n * Ski Holiday Costs         *";
-print "\n *                           *";
-print "\n * 1 - Add a Holiday         *";
-print "\n * 2 - List Holidays         *";
-print "\n * 0 - Exit                  *";
-print "\n *                           *";
-print "\n *****************************";
-
-$choice =<>;
-chomp($choice);
-if( $choice eq "2"){
-    showRecords();
-} elsif( $choice eq "1"){
-    addSkiHoliday();
-} else {
-
     print "\n *****************************";
-    print "\n *         The End           *";
-    print "\n *****************************\n\n";
-}
-}
+    print "\n *                           *";
+    print "\n * Ski Holiday Costs         *";
+    print "\n *                           *";
+    print "\n * 1 - Add a Holiday         *";
+    print "\n * 2 - List Holidays         *";
+    print "\n * 0 - Exit                  *";
+    print "\n *                           *";
+    print "\n *****************************";
+
+    $choice =<>;
+    chomp($choice);
+    if( $choice eq "2"){
+        showRecords();
+    } elsif( $choice eq "1"){
+        addSkiHoliday();
+    } else {
+        print "\n *****************************";
+        print "\n *         The End           *";
+        print "\n *****************************\n\n";
+    }
+} # end of while
