@@ -36,6 +36,21 @@ sub writeRecord {
     print "record written to $filename \n";
 }
 
+sub readFile {
+#my $filename = "skihols.txt";
+my $filename = shift;
+
+
+open(FILE,"<$filename") or die "Can't open filelist\n";
+print "Contents of $filename \n";
+        while (<FILE>) {
+                chomp;
+                print $_;
+                print "\n";
+                }
+        close(FILE);
+}
+
 
 # the main function starts here         #
 
@@ -81,5 +96,18 @@ if( $saveit eq "y") {
 } else {
     print "\nRecord not printed\n";
 }
+
+
+# do you wish to write this to a file   #
+print "\n Do you want to see the records of holidays (y or n)? ";
+$showrecords = <>;
+chomp($showrecords);
+if( $showrecords eq "y") {
+    readFile("skihols.txt");
+} else {
+    print "\nFile not printed\n";
+}
+
+
 
 print "\n *** The End *** \n";
