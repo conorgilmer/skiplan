@@ -6,7 +6,7 @@ perl -w skicalc.pl
 
 To Do
 -----
-Use subroutine for input
+Use subroutine for input (done)
 Add Insurance, lessons etc.
 Write to file - record of ski trip date location text
 
