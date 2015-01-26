@@ -5,11 +5,10 @@
 # Conor Gilmer (conor.gilmer@gmail.com) #
 # ------------------------------------- #
 
+# ------ subroutines / functions ------ #
 
-# subroutines / functions               #
-
-# ask a question and                    #
-# get the user input for that question  #
+# ------ ask a question and ----------- #
+# ------ get the input for a question - #
 sub quest {
     my $questtext = shift;
     my $answer = 0;
@@ -17,7 +16,7 @@ sub quest {
     $answer = <>;
 }
 
-# write the details submmited to a file #
+# ------ write the details to a file -- #
 sub writeRecord {
     my $text     = shift;
     my $f        = shift;
@@ -36,78 +35,118 @@ sub writeRecord {
     print "record written to $filename \n";
 }
 
+# ------ read the ski holidays file ---- #
 sub readFile {
 #my $filename = "skihols.txt";
 my $filename = shift;
 
-
 open(FILE,"<$filename") or die "Can't open filelist\n";
-print "Contents of $filename \n";
+print "\n\n *** Contents of $filename ***\n\n";
         while (<FILE>) {
                 chomp;
                 print $_;
                 print "\n";
                 }
         close(FILE);
+print "\n *****************************\n";
 }
 
+# ------ show the list of holidays ? -- #
+sub showRecords { 
+# do you wish to write this to a file   #
+    print "\n Do you want to see the records of holidays (y or n)? ";
+    my $showrecords = <>;
+    chomp($showrecords);
+    if( $showrecords eq "y") {
+        readFile("skihols.txt");
+    } else {
+        print "\nFile not printed\n";
+    }
+}
 
-# the main function starts here         #
-
+# -------- add a ski holiday ---------- #
+sub addSkiHoliday {
 # initialise variables                  #
-$flights   = 0;
-$accom     = 0;
-$transfer  = 0;
-$skihire   = 0;
-$skipass   = 0;
-$insurance = 0;
-$lessons   = 0;
-$total     = 0;
+    my $flights   = 0;
+    my $accom     = 0;
+    my $transfer  = 0;
+    my $skihire   = 0;
+    my $skipass   = 0;
+    my $insurance = 0;
+    my $lessons   = 0;
+    my $total     = 0;
 
-print "\n *** Ski Calculator *** \n\n";
-$flights   = quest("Flights");
-chomp($flights);
-$transfer  = quest("Airport Transfer");
-chomp($transfer);
-$accom     = quest("Accommodation");;
-chomp($accom);
-$skipass   = quest("Ski Pass");;
-chomp($skipass);
-$skihire   = quest("Ski Hire");;
-chomp($skihire);
-$insurance = quest("Ski Insurance");;
-chomp($insurance);
-$lessons   = quest("Ski Lessons");;
-chomp($lessons);
+    print "\n *** Ski Calculator *** \n\n";
+    $flights   = quest("Flights");
+    chomp($flights);
+    $transfer  = quest("Airport Transfer");
+    chomp($transfer);
+    $accom     = quest("Accommodation");;
+    chomp($accom);
+    $skipass   = quest("Ski Pass");;
+    chomp($skipass);
+    $skihire   = quest("Ski Hire");;
+    chomp($skihire);
+    $insurance = quest("Ski Insurance");;
+    chomp($insurance);
+    $lessons   = quest("Ski Lessons");;
+    chomp($lessons);
 
-$total = $flights + $transfer + $accom + $skihire + $skipass + $insurance + $lessons;
+    $total = $flights + $transfer + $accom + $skihire + $skipass + $insurance + $lessons;
 
-print "\nThe total cost is €", $total , "\n";
+    print "\nThe total cost is €", $total , "\n";
 
+    # do you wish to write this to a file   #
+    print "\n Do you want to write this to a file (y or n)? ";
+    my $saveit = <>;
+    chomp($saveit);
+    if( $saveit eq "y") {
+        print "Enter a name for the holiday ?";
+        my $name = <>;
+        chomp($name);
+        writeRecord($name, $flights, $transfer, $accom, $skipass, $skihire, $insurance, $lessons, $total);
+    } else {
+        print "\nRecord not printed\n";
+    }
+}
+
+# ------ show the list of holidays ? -- #
+sub showRecords { 
 # do you wish to write this to a file   #
-print "\n Do you want to write this to a file (y or n)? ";
-$saveit = <>;
-chomp($saveit);
-if( $saveit eq "y") {
-    print "Enter a name for the holiday ?";
-    $name = <>;
-    chomp($name);
-    writeRecord($name, $flights, $transfer, $accom, $skipass, $skihire, $insurance, $lessons, $total);
-} else {
-    print "\nRecord not printed\n";
+    print "\n Do you want to see the records of holidays (y or n)? ";
+    my $showrecords = <>;
+    chomp($showrecords);
+    if( $showrecords eq "y") {
+        readFile("skihols.txt");
+    } else {
+        print "\nFile not printed\n";
+    }
 }
 
 
-# do you wish to write this to a file   #
-print "\n Do you want to see the records of holidays (y or n)? ";
-$showrecords = <>;
-chomp($showrecords);
-if( $showrecords eq "y") {
-    readFile("skihols.txt");
+$choice =9;
+# ------ main function ---------------- #
+while ($choice ne "0") {
+print "\n *****************************";
+print "\n *                           *";
+print "\n * Ski Holiday Costs         *";
+print "\n *                           *";
+print "\n * 1 - Add a Holiday         *";
+print "\n * 2 - List Holidays         *";
+print "\n * 0 - Exit                  *";
+print "\n *                           *";
+print "\n *****************************";
+
+$choice =<>;
+chomp($choice);
+if( $choice eq "2"){
+    showRecords();
+} elsif( $choice eq "1"){
+    addSkiHoliday();
 } else {
-    print "\nFile not printed\n";
+
+    print "\n *****************************";
+    print "\n *         The End           *";
+    print "\n *****************************\n\n";
 }
-
-
-
-print "\n *** The End *** \n";
+}
