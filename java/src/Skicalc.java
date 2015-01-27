@@ -1,5 +1,8 @@
 /* Skicalc.java 
  * calculate the costs for a skiholiday 
+ * write the costs to a file for future reference
+ * display a list of previous ski trips save to this file
+ * by Conor Gilmer (conor.gilmer@gmail.com)
  */
 
 package conors;
@@ -10,7 +13,7 @@ import java.io.*;
 
 public final class Skicalc {
 	/* initialise variables */
-	public static String tripname      = "";
+	public static String location      = "";
 	public static int days             = 0;
 	public static double dailyspend    = 0;
 	public static double weeklyspend   = 0;
@@ -40,7 +43,17 @@ public final class Skicalc {
 		Scanner input = new Scanner(System.in);
 		display(quest);
 		String sInput = input.next();;
-		return  Double.parseDouble(sInput);
+		return  Double.parseDouble(sInput); //return a double
+		
+	} /* end of getCost */	
+        
+	/* get the description/location entered*/
+	private static String getDescription(String quest)
+	{
+		Scanner input = new Scanner(System.in);
+		display(quest);
+		String sInput = input.next();;
+		return sInput;
 		
 	} /* end of getCost */	
 
@@ -89,7 +102,7 @@ public final class Skicalc {
 	public static void main (String[] args) {
 
 		display("Ski Calculator");
-		String location = "Austria";
+		location = getDescription("Where is the trip to");
 		flights = getCost("Enter flights Cost");
 		connection = getCost("Enter Connection Cost");
 		accommodation = getCost("Enter Accommodation Cost");
@@ -97,7 +110,7 @@ public final class Skicalc {
 		skihire = getCost("Enter Ski Hire Cost");
 		lessons = getCost("Enter Ski Lessons Cost");
 		insurance = getCost("Enter Insurance Cost");
-		days = (int) getCost("How many days are you there for ");
+		days = (int) getCost("How many days are you there for "); //cast double to an int
 		dailyspend = getCost("Enter your average daily spend ");
  		weeklyspend = days * dailyspend;
 		// total costs and print
