@@ -98,10 +98,7 @@ public final class Skicalc {
 		}
 	} /* end of readFile */
 
-	/* Main Function */
-	public static void main (String[] args) {
-
-		display("Ski Calculator");
+	private static void addTrip(String filename) {
 		location = getDescription("Where is the trip to");
 		flights = getCost("Enter flights Cost");
 		connection = getCost("Enter Connection Cost");
@@ -129,8 +126,41 @@ public final class Skicalc {
 			 +dailyspend+","
 			 +weeklyspend+","
 			 + total +",\n", outputFile);
-		display("\n *** The End *** \n");
-		readFile(outputFile);
+		display("\n *** End of Add Trip *** \n");
+	} /* end of addTrip */
+
+
+	/* Main Function */
+	public static void main (String[] args) {
+		int var = 0;
+		String input;
+		Scanner scanner = new Scanner (System.in );
+		do {
+		display("Ski Calculator");
+		display("\n");
+		display("1. Add Trip\n");
+		display("2. View Trips\n");
+		display("0. Exit\n");
+		display("Select ?");
+		input = scanner.next();
+		var = Integer.parseInt(input);
+
+		switch(var) {
+		case 1:
+			addTrip(outputFile);
+			break;
+		case 2:
+			readFile(outputFile);
+			break;
+		case 0:
+			display("go again\n");
+			break;
+		default:
+			display("default ");
+			break;
+		} /* end of switch */
+		}while(var ==1|| var==2);
+
 		display("\n *** The End *** \n");
 	} /* end of main */
 
