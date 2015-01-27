@@ -5,6 +5,7 @@
 package conors;
 
 import java.util.Scanner;
+import java.io.*;
 //import java.util.String;
 
 public final class Skicalc {
@@ -35,10 +36,29 @@ public final class Skicalc {
 		
 	}	
 
+	private static void writeToFile(String str) {
+
+      		try {
+            	//	String str = "SomeMoreTextIsHere";
+            		File newTextFile = new File("skidata.txt");
+
+            		FileWriter fw = new FileWriter(newTextFile);
+            		fw.write(str);
+            		fw.close();
+
+       			 
+		} catch (IOException iox) {
+            	//do stuff with exception
+            	iox.printStackTrace();
+        	}
+
+
+	}
+
 	public static void main (String[] args) {
 
 		display("Ski Calculator");
-
+		String location = "Austria";
 		flights = getCost("Enter flights Cost");
 		connection = getCost("Enter Connection Cost");
 		accommodation = getCost("Enter Accommodation Cost");
@@ -49,6 +69,13 @@ public final class Skicalc {
 		total = flights + connection + accommodation + skihire + skipass;
 		display("The Total Cost is ");
 		displayf(total);
+		writeToFile(location +","
+			 +flights+","
+			 +connection+","
+			 +accommodation+","
+			 +skihire+","
+			 +skipass+","
+			 + total +",\n");
 		display("\n *** The End *** \n");
 
 	} /* end of main */
