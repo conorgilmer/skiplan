@@ -1,10 +1,11 @@
 #!/bin/awk
-# Usage : awk -f trip.awk costs.csv
+# Usage : awk -f trip.awk costs.csv > report.out
 # or   cat costs.csv | awk -f trip.awk
 # calculate the average spend for each item in the csv file
 # 
 #
 BEGIN {	FS = ","
+	print "\nSki Holiday Costs Report"
 	print "\nNo.\tLocation\tFlights\tTrans\tAccom\tSkipass\tSkiPack\tTotal\n";
 }
 {	sum = $2 + $3 + $4 + $5 + $6;

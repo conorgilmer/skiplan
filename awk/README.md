@@ -4,7 +4,7 @@ Calculate the average of each element in the spreadsheet
 
 ##Print to Screen
 *usage* 
-awk -f trip.awk costs.csv 
+awk -f trip.awk costs.csv > report.out 
 or cat costs.csv | awk -f trip.awk
 
 ##Generate HTML
@@ -12,5 +12,6 @@ or cat costs.csv | awk -f trip.awk
 *Usage*
 awk -f tripshtml.awk costs.csv > output.html
 
-##Table Layout
-[Location	Flights	Trans	Accom	Skipass	SkiPack]
+##CSV File Layout
+The input file is a csv file 
+[Location, Flights, Transfers, Accommodation, Skipass, SkiPack]
