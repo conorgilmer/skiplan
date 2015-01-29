@@ -2,5 +2,12 @@
 
 Calculate the average of each element in the spreadsheet
 
-usage: awk -f trip.awk costs.csv 
+##Print to Screen
+*usage* 
+awk -f trip.awk costs.csv 
 or cat costs.csv | awk -f trip.awk
+
+##Generate HTML
+
+*Usage*
+awk -f tripshtml.awk costs.csv > output.html
