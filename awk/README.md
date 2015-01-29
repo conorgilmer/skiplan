@@ -11,3 +11,6 @@ or cat costs.csv | awk -f trip.awk
 
 *Usage*
 awk -f tripshtml.awk costs.csv > output.html
+
+##Table Layout
+[Location	Flights	Trans	Accom	Skipass	SkiPack]
