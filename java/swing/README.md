@@ -7,11 +7,14 @@ or
 >ant all
 
 ##To do
-write to file
-read from file
-generate breadown chart
-generate pie chart
+
++input validation
++write to file
++read from file
++generate breadown chart
++generate pie chart
 
 ##Done
-Read in default values from Resource Bundle
-Set up Apache Ant build - with resource bundle bundled in build
+
++Read in default values from Resource Bundle
++Set up Apache Ant build - with resource bundle bundled in build
