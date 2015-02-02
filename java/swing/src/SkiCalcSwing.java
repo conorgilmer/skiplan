@@ -3,6 +3,13 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.swing.*;
 import javax.swing.event.*;
 //import java.net.UnknownHostException;
@@ -25,6 +32,7 @@ public class SkiCalcSwing  extends JFrame
 	public ResourceBundle res = ResourceBundle.getBundle("STI");
 	
     public float cost = 0;
+    public String destination = "";
     public float flights =0;
     public float transfers= 20;
     public float accom = 202;
@@ -192,12 +200,14 @@ public void actionPerformed(ActionEvent evt)
   Object source = evt.getSource();
   if (source == Calculate)
 	  {
+	  	 	destination = destinationField.getText();
 	  		flights = Float.valueOf((flightsField.getText()).trim()).floatValue();
 	  		transfers = Float.valueOf((transferField.getText()).trim()).floatValue();
 	  		accom = Float.valueOf((accomField.getText()).trim()).floatValue();
 	  		skipass = Float.valueOf((skipassField.getText()).trim()).floatValue();
 	  		skihire = Float.valueOf((skihireField.getText()).trim()).floatValue();
 	  		cost = flights + transfers + accom + skipass + skihire;
+	  		SkiTripInfo skiTrip = new SkiTripInfo(destination, flights, transfers, accom, skipass,skihire, 0, 0, 0, 0, 0, cost);
            displayLine("Ski Trip Costs:");
            displayLine("Destination:  \t\t" + destinationField.getText());
            displayLine("Flights:  \t\t" + floattoeuro(flights));
@@ -206,8 +216,10 @@ public void actionPerformed(ActionEvent evt)
            displayLine("Ski Pass:  \t\t" + floattoeuro(skipass));
            displayLine("Ski Hire:  \t\t" + floattoeuro(skihire));
            displayLine("Total Cost \t =\t" + floattoeuro(cost));
-           
-           
+
+           displayLine("from object");
+           displayLine(skiTrip.toString());
+           writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
            Reset.setEnabled(true);
            resetItem.setEnabled(true);
 	   
@@ -219,6 +231,10 @@ public void actionPerformed(ActionEvent evt)
            resetItem.setEnabled(true);
            // TODO : save skitrip object write/append to file
 	  }
+  else if(source == viewTripsItem)
+  {
+	  readDataFile(dataFile);
+  }
 
 	  else if(source == aboutItem)
 	  {
@@ -285,6 +301,51 @@ private void displayMessage(String message)
 	 //displayLine(message); 
 	   }
 */
+      
+      /* write a string to a file, if file exists append string to file. */
+      private void writeToFile(String str, String filename) {
+              try {
+                      File dataFile   = new File(filename);
+                      PrintWriter out = null;
+                      if ( dataFile.exists() && !dataFile.isDirectory() ) {
+                              out = new PrintWriter(new FileOutputStream(new File(filename), true));
+                              out.append(str);
+                              out.close();
+                              displayLine("\nRow added to file "+filename+"\n");
+                      }
+                      else {
+                              out = new PrintWriter(filename);
+                              out.println(str);
+                              out.close();
+                              displayLine("\nNew file "+filename+ " created and row added.\n");
+                      }
+              } catch (IOException iox) {
+                      //do stuff with exception
+                      iox.printStackTrace();
+              }
+      } /* end of writeToFile */
+
+
+      /* read from a file and print on screen */
+      private void readDataFile(String filename) {
+              try {
+                      File dataFile         = new File(filename);
+                      FileReader fileReader = new FileReader(dataFile);
+                      BufferedReader reader = new BufferedReader(fileReader);
+                      //BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+                      String line = null;
+                      displayLine("Contents of " + filename + "\n");
+                      while ((line = reader.readLine()) != null) {
+                              displayLine(line);
+                      }
+                      displayLine("\nEnd of " + filename + "\n");
+                      reader.close();
+              } catch (IOException x) {
+                      System.err.format("IOException: %s%n", x);
+              }
+      } /* end of readFile */
+
+
 
   
 
