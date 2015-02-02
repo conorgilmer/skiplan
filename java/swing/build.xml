@@ -1,0 +1,44 @@
+<!--  build.xml file  -->
+<!--  Conor Gilmer(cgilmer@tinet.ie)  -->
+<project name="basic build file for ANT" default="all">
+
+<!-- Initialize/ Clean up directory for build  -->
+<target name="clean">
+	<delete dir="build"/>
+</target>
+
+<!--  Compile  -->
+<target name="compile">
+	<mkdir dir="build/classes"/>
+	<!-- include resource bundle -->
+	<copy todir="build/classes">
+	<fileset dir="src">
+		<include name="**/*.properties"/>
+	</fileset>
+	</copy>
+	<javac srcdir="src/" destdir="build/classes"/>
+</target>
+
+<!--  make jar file from compiled classes -->
+<target name="jar">
+	<mkdir dir="build/jar"/>
+	<jar destfile="build/jar/SkiCalcSwing.jar" basedir="build/classes">
+		<manifest>
+			<attribute name="Main-Class" value="SkiCalcSwing"/>
+		</manifest>
+	</jar>
+</target>
+
+<!--  run execute jar file   -->
+<target name="run">
+	<java jar="build/jar/SkiCalcSwing.jar" fork="true"/>
+</target>
+<!--  run all build routines  -->
+<target name="all" depends="clean">
+	<antcall target="compile"/>
+	<antcall target="jar"/>
+	<antcall target="run"/>
+<!--         <antcall target="deploy"/> -->
+</target>
+
+</project>
