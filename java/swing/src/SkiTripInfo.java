@@ -1,4 +1,3 @@
-import java.util.*;
 
 public class SkiTripInfo
 {
@@ -57,6 +56,11 @@ public class SkiTripInfo
 	public double getWeeklyspend()  { return weeklyspend;} 
 	public double getTotal()        { return total;}
 
+	/* return a string for a csv file record */
+	public String csvRecord() {
+		return location + ","+ flights +","+ connection+","+ accommodation+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ total +"\n";
+	}
+	
 	/* print out the contents of the object*/
 	public String toString()
 	{

@@ -12,20 +12,12 @@ import java.io.PrintWriter;
 
 import javax.swing.*;
 import javax.swing.event.*;
-//import java.net.UnknownHostException;
-//import java.io.IOException;
-import java.sql.*;
-//import java.text.DecimalFormat;
-import java.text.MessageFormat;
-//import java.util.*;
 import java.util.ResourceBundle;
 
 public class SkiCalcSwing  extends JFrame 
    implements ActionListener, MenuListener
 {
-    /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	static  String displayMsg = "Ski  Trip Calculator";
     
@@ -34,10 +26,10 @@ public class SkiCalcSwing  extends JFrame
     public float cost = 0;
     public String destination = "";
     public float flights =0;
-    public float transfers= 20;
-    public float accom = 202;
-    public float skihire = 110;
-    public float skipass =120;
+    public float transfers= 0;
+    public float accom = 0;
+    public float skihire = 0;
+    public float skipass =0;
 
     public String dataFile = "skidata.csv";
     
@@ -90,9 +82,6 @@ public class SkiCalcSwing  extends JFrame
 	  tripPanel.setLayout(new GridLayout(0, 2, 5, 5));
 	  tripPanel.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Enter the Details of your Trip"));
 	 
-//	  JLabel cardSpace = new JLabel(" "); 
-//	  tripPanel.add(cardSpace);
-
 	  JPanel choicePanel = new JPanel();
 	  choicePanel.setLayout(new GridLayout(1, 2));
 	  choicePanel.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Save or Reset"));
@@ -109,8 +98,6 @@ public class SkiCalcSwing  extends JFrame
 	  resultsTextArea = new JTextArea();
 	  JScrollPane resultsPanel = new JScrollPane(resultsTextArea);
 	  resultsPanel.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Display Results"));
-	  @SuppressWarnings("unused")
-	ButtonGroup directionGroup = new ButtonGroup();
 
 	  destinationLabel = new JLabel();
 	  destinationLabel.setText("Destination:");
@@ -219,21 +206,31 @@ public void actionPerformed(ActionEvent evt)
 
            displayLine("from object");
            displayLine(skiTrip.toString());
-           writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
+         //  writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
            Reset.setEnabled(true);
            resetItem.setEnabled(true);
 	   
 	  }
-  else if (source == Save)
+  else if (source == Save || source == saveTripItem)
 	  {
-           displayMessage("Save");
-           Reset.setEnabled(true);
-           resetItem.setEnabled(true);
-           // TODO : save skitrip object write/append to file
+           displayLine("Saving to " + dataFile);
+	  	 	destination = destinationField.getText();
+	  		flights = Float.valueOf((flightsField.getText()).trim()).floatValue();
+	  		transfers = Float.valueOf((transferField.getText()).trim()).floatValue();
+	  		accom = Float.valueOf((accomField.getText()).trim()).floatValue();
+	  		skipass = Float.valueOf((skipassField.getText()).trim()).floatValue();
+	  		skihire = Float.valueOf((skihireField.getText()).trim()).floatValue();
+	  		cost = flights + transfers + accom + skipass + skihire;
+	  		SkiTripInfo skiTrip = new SkiTripInfo(destination, flights, transfers, accom, skipass,skihire, 0, 0, 0, 0, 0, cost);
+	  	   // writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
+	        writeToFile(skiTrip.csvRecord(), dataFile);
+           Save.setEnabled(false);
+          
 	  }
   else if(source == viewTripsItem)
   {
 	  readDataFile(dataFile);
+	  Save.setEnabled(true);
   }
 
 	  else if(source == aboutItem)
@@ -245,19 +242,20 @@ public void actionPerformed(ActionEvent evt)
 
 		  new ReadMe(this).show();
 	  }
-         else if (source == Reset)
+         else if (source == Reset || source == resetItem)
 	{	
-	 // runsField.setText( Integer.toString(runsno));
+        	    destinationField.setText("Where?");
+        	    flightsField.setText("");
+        	    transferField.setText("");
+        	    accomField.setText("");
+        	    skipassField.setText("");
+        	    skihireField.setText("");
                 Reset.setEnabled(false);
                 resetItem.setEnabled(false);
-		displayMessage("Reset Game");}
-         else if (source == resetItem)
-	{	
-	 // runsField.setText( Integer.toString(runsno));
-                Reset.setEnabled(false);
-                resetItem.setEnabled(false);
-		displayMessage("Reset Game");}
-      repaint();
+                Save.setEnabled(true);
+                saveTripItem.setEnabled(true);
+		displayLine("Reset Input Fields");
+		}
    }
 
    @SuppressWarnings("deprecation")
@@ -277,7 +275,7 @@ public static void main(String[] args)
     } /* end of floattoeuro */
    
    
-   @SuppressWarnings("deprecation")
+/*   @SuppressWarnings("deprecation")
 private void displayMessage(String message)
    {
 	  
@@ -285,7 +283,7 @@ private void displayMessage(String message)
 	  resultsTextArea.setFont(boldFont);
 	  resultsTextArea.append(MessageFormat.format("{0}:\r\n\t", time.toLocaleString()));
 	  resultsTextArea.append(message + "\n");
-   } /* end of displayMessage */
+   }*/ /* end of displayMessage */
 
       private void displayLine(String message)
 	   {
@@ -294,13 +292,6 @@ private void displayMessage(String message)
 	  resultsTextArea.append(message + "\n");
 	   } /* end of displayLine */
 
-/*
-      private void log(String message)
-	   {
-      	System.out.print(message);
-	 //displayLine(message); 
-	   }
-*/
       
       /* write a string to a file, if file exists append string to file. */
       private void writeToFile(String str, String filename) {
@@ -336,7 +327,9 @@ private void displayMessage(String message)
                       String line = null;
                       displayLine("Contents of " + filename + "\n");
                       while ((line = reader.readLine()) != null) {
-                              displayLine(line);
+                             //displayLine(line);
+                    	     String []  s = line.split(",");
+                    	     displayLine(s[0] +"\t" + s[11]);
                       }
                       displayLine("\nEnd of " + filename + "\n");
                       reader.close();
