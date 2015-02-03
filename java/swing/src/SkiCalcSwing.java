@@ -23,17 +23,19 @@ public class SkiCalcSwing  extends JFrame
 	private static final long serialVersionUID = 1L;
 	static  String displayMsg = "Ski  Trip Calculator";
     
-	public ResourceBundle res = ResourceBundle.getBundle("STI");
-	
-    public float cost = 0;
+	/* variables */
+    public float cost         = 0;
     public String destination = "";
-    public float flights =0;
-    public float transfers= 0;
-    public float accom = 0;
-    public float skihire = 0;
-    public float skipass =0;
+    public float flights      = 0;
+    public float transfers    = 0;
+    public float accom        = 0;
+    public float skihire      = 0;
+    public float skipass      = 0;
 
-    public String dataFile = "skidata.csv";
+    /* i/o filenames */
+	public ResourceBundle res = ResourceBundle.getBundle("STI"); /* some default values */
+    public String dataFile    = "skidata.csv";
+    public String reportFile  = "report.csv";
     
    public SkiCalcSwing () 
    {
@@ -112,7 +114,6 @@ public class SkiCalcSwing  extends JFrame
 	  destinationField.setText(res.getString("Location"));
 	  tripPanel.add(destinationField);
 	 
-
 	  flightsLabel = new JLabel();
 	  flightsLabel.setText("Cost of Flights:");
 	  tripPanel.add(flightsLabel);	  
@@ -158,15 +159,15 @@ public class SkiCalcSwing  extends JFrame
 	  Calculate.addActionListener(this);
 	  tripPanel.add(Calculate);
 
-	  Clear = new JButton("Clear");
-	  Clear.setEnabled(true);
-	  Clear.addActionListener(this);
-	  tripPanel.add(Clear);
+	  Report = new JButton("Report");
+	  Report.setEnabled(true);
+	  Report.addActionListener(this);
+	  tripPanel.add(Report);
 	  
       Container contentPane = getContentPane();
 	  contentPane.add(resultsPanel, "Center");
-	  contentPane.add(tripPanel, "North");
-	  contentPane.add(choicePanel, "South");
+	  contentPane.add(tripPanel,    "North" );
+	  contentPane.add(choicePanel,  "South" );
 
    } /* end of SkiCalcSwing */
 
@@ -203,20 +204,20 @@ public void actionPerformed(ActionEvent evt)
 	  		skihire = Float.valueOf((skihireField.getText()).trim()).floatValue();
 	  		cost = flights + transfers + accom + skipass + skihire;
 	  		SkiTripInfo skiTrip = new SkiTripInfo(destination, flights, transfers, accom, skipass,skihire, 0, 0, 0, 0, 0, cost);
-           displayLine("Ski Trip Costs:");
-           displayLine("Destination:  \t\t" + destinationField.getText());
-           displayLine("Flights:  \t\t" + floattoeuro(flights));
-           displayLine("Transfers:  \t\t" + floattoeuro(transfers));
-           displayLine("Accommodation:\t" + floattoeuro(accom));
-           displayLine("Ski Pass:  \t\t" + floattoeuro(skipass));
-           displayLine("Ski Hire:  \t\t" + floattoeuro(skihire));
-           displayLine("Total Cost \t =\t" + floattoeuro(cost));
+            displayLine("Ski Trip Costs:");
+            displayLine("Destination:  \t\t" + destinationField.getText());
+            displayLine("Flights:  \t\t" + floattoeuro(flights));
+            displayLine("Transfers:  \t\t" + floattoeuro(transfers));
+            displayLine("Accommodation:\t" + floattoeuro(accom));
+            displayLine("Ski Pass:  \t\t" + floattoeuro(skipass));
+            displayLine("Ski Hire:  \t\t" + floattoeuro(skihire));
+            displayLine("Total Cost \t =\t" + floattoeuro(cost));
 
-           displayLine("from object");
-           displayLine(skiTrip.toString());
+            displayLine("from object");
+            displayLine(skiTrip.toString());
          //  writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
-           Reset.setEnabled(true);
-           resetItem.setEnabled(true);
+            Reset.setEnabled(true);
+            resetItem.setEnabled(true);
 	  	 	}
 	  }
   else if (source == Save || source == saveTripItem)
@@ -236,12 +237,20 @@ public void actionPerformed(ActionEvent evt)
 	  	   // writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
 	        writeToFile(skiTrip.csvRecord(), dataFile);
             Save.setEnabled(false);
+            resetItem.setEnabled(true);
+            Reset.setEnabled(true);
 	  	 	}
 	  }
   else if(source == viewTripsItem)
   {
 	  readDataFile(dataFile);
 	  Save.setEnabled(true);
+  }
+  else if (source == Report){
+	  displayLine("generating report");
+	  SkiTripsReport tripsReport = generateReport(dataFile);
+	  displayLine(tripsReport.toString());
+	  writeToFile(tripsReport.toString(), reportFile);
   }
 
 	  else if(source == aboutItem)
@@ -267,15 +276,15 @@ public void actionPerformed(ActionEvent evt)
                 saveTripItem.setEnabled(true);
 		displayLine("Reset Input Fields");
 		}
-   } /* end of Actionperformed*/
+   } /* end of actionPerformed */
 
    @SuppressWarnings("deprecation")
 public static void main(String[] args)
    {  Frame f = new SkiCalcSwing();
       f.show();  
-   }
+   } /* end of main */
    
-   /* float to euro convert float to string currency formatted for displaying on screen*/
+    /* float to euro convert float to string currency formatted for displaying on screen*/
     public String floattoeuro(float input){
 	//DecimalFormat df = new DecimalFormat();
 	//df.setMaximumFractionDigits(2);
@@ -296,6 +305,7 @@ private void displayMessage(String message)
 	  resultsTextArea.append(message + "\n");
    }*/ /* end of displayMessage */
 
+      /* display a Line of text */	
       private void displayLine(String message)
 	   {
 	  
@@ -317,16 +327,16 @@ private void displayMessage(String message)
                       }
                       else {
                               out = new PrintWriter(filename);
-                              out.println(str);
+                              out.append(str); /* out.println(str); avoid 2 carriage returns */
                               out.close();
-                              displayLine("\nNew file "+filename+ " created and row added.\n");
+                              displayLine("\nNew file "+ filename + " created and row added.\n");
                       }
               } catch (IOException iox) {
                       //do stuff with exception
                       iox.printStackTrace();
               }
       } /* end of writeToFile */
-
+      
 
       /* read from a file and print on screen */
       private void readDataFile(String filename) {
@@ -348,6 +358,57 @@ private void displayMessage(String message)
                       System.err.format("IOException: %s%n", x);
               }
       } /* end of readFile */
+      
+      /* read from a file and print on screen */
+      private SkiTripsReport generateReport(String filename) {
+              try {
+            	  
+                  int    trips        = 0; 
+                  double avgFlights   = 0; 
+                  double avgTransfers = 0;
+                  double avgAccom     = 0;
+                  double avgSkipass   = 0;
+                  double avgSkihire   = 0;
+                  double avgCost      = 0; 
+                  
+                      File dataFile         = new File(filename);
+                      FileReader fileReader = new FileReader(dataFile);
+                      BufferedReader reader = new BufferedReader(fileReader);
+                      //BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+                      String line = null;
+                      displayLine("Contents of " + filename + "\n");
+                      while ((line = reader.readLine()) != null) {
+                 	     String []  s = line.split(",");
+                             trips = trips + 1;
+                             avgFlights= avgFlights + Float.valueOf(s[1]);
+                             avgTransfers= avgTransfers + Float.valueOf(s[2]);
+                             avgAccom= avgFlights + Float.valueOf(s[3]);
+                             avgSkihire= avgSkihire + Float.valueOf(s[5]);
+                             avgSkipass= avgSkipass + Float.valueOf(s[4]);
+                             avgCost= avgCost + Float.valueOf(s[11]);
+                             
+                             
+                    	     displayLine(s[0] +"\t" + s[11]);
+                    	     
+                      }
+                      avgFlights = avgFlights / trips;
+                      avgTransfers = avgTransfers / trips;
+                      avgAccom     = avgAccom / trips;
+                      avgSkipass   = avgSkipass /trips;
+                      avgSkihire   = avgSkihire / trips;
+                      avgCost      = avgCost / trips;
+                      displayLine ("\n avg " + avgCost + " for " + trips);
+                      displayLine("\nEnd of " + filename + "\n");
+                      reader.close();
+                      SkiTripsReport tripsReport = new SkiTripsReport(trips, avgFlights, avgTransfers,avgAccom,avgSkipass,avgSkihire,avgCost);
+                      return tripsReport;
+              } catch (IOException x) {
+                      System.err.format("IOException: %s%n", x);
+              }
+			return null;
+      } /* end of readFile */
+      
+      
 
    /* validate input values in invalid return false and text in display area and in textfield */   
    public boolean validInput(){
@@ -464,7 +525,7 @@ private void displayMessage(String message)
    
    /* buttons */
    private JButton    Calculate;
-   private JButton    Clear;
+   private JButton    Report;
    private JButton    Reset;
    private JButton    Save;   
    
