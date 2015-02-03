@@ -42,7 +42,7 @@ public class SkiCalcSwing  extends JFrame
 	   /** Basic window stuff: name, size	    * a	    */
 	  //Util.debugOff();
 	  setTitle("Ski Trip Calculator");
-	  setSize(400, 600);
+	  setSize(750, 650);
 	  Toolkit tk = Toolkit.getDefaultToolkit();
 	  Dimension screenSize = tk.getScreenSize();
 	  
@@ -79,10 +79,15 @@ public class SkiCalcSwing  extends JFrame
       viewTripsItem = new JMenuItem("View Trips");
       viewTripsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
       viewTripsItem.setEnabled(true);
+      
+      generateReportItem = new JMenuItem("Generate Report");
+      generateReportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_MASK));
+      generateReportItem.setEnabled(true);
+      
       menuBar.add(makeMenu(helpMenu, new Object[]{ aboutItem, readmeItem}, this));
       
       tripMenu = new JMenu("Trips");  
-      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, resetItem}, this));
+      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, resetItem}, this));
 	  /** End menu set-up   */
       
 	  JPanel tripPanel = new JPanel();
@@ -234,7 +239,6 @@ public void actionPerformed(ActionEvent evt)
 	  		
 	  		cost = flights + transfers + accom + skipass + skihire;
 	  		SkiTripInfo skiTrip = new SkiTripInfo(destination, flights, transfers, accom, skipass,skihire, 0, 0, 0, 0, 0, cost);
-	  	   // writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
 	        writeToFile(skiTrip.csvRecord(), dataFile);
             Save.setEnabled(false);
             resetItem.setEnabled(true);
@@ -246,11 +250,11 @@ public void actionPerformed(ActionEvent evt)
 	  readDataFile(dataFile);
 	  Save.setEnabled(true);
   }
-  else if (source == Report){
+  else if (source == Report || source == generateReportItem){
 	  displayLine("generating report");
 	  SkiTripsReport tripsReport = generateReport(dataFile);
 	  displayLine(tripsReport.toString());
-	  writeToFile(tripsReport.toString(), reportFile);
+	  writeToFile(tripsReport.toString() + "\n", reportFile);
   }
 
 	  else if(source == aboutItem)
@@ -294,16 +298,6 @@ public static void main(String[] args)
 	return str;
     } /* end of floattoeuro */
    
-   
-/*   @SuppressWarnings("deprecation")
-private void displayMessage(String message)
-   {
-	  
-	  Time time = new Time(System.currentTimeMillis());
-	  resultsTextArea.setFont(boldFont);
-	  resultsTextArea.append(MessageFormat.format("{0}:\r\n\t", time.toLocaleString()));
-	  resultsTextArea.append(message + "\n");
-   }*/ /* end of displayMessage */
 
       /* display a Line of text */	
       private void displayLine(String message)
@@ -346,13 +340,15 @@ private void displayMessage(String message)
                       BufferedReader reader = new BufferedReader(fileReader);
                       //BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
                       String line = null;
-                      displayLine("Contents of " + filename + "\n");
+                      displayLine("Contents of \"" + filename + "\"\n");
+                      /* Headings */
+             	      displayLine("Resort\tFlights\tTransfers\tHotel\tSki pass\tSki hire\tTotal" );
                       while ((line = reader.readLine()) != null) {
                              //displayLine(line);
                     	     String []  s = line.split(",");
-                    	     displayLine(s[0] +"\t" + s[11]);
+                    	     displayLine(s[0] +"\t"+ s[1] +"\t"+s[2] +"\t" +s[3] +"\t" +s[4] +"\t" +s[5] +"\t" + s[11]);
                       }
-                      displayLine("\nEnd of " + filename + "\n");
+                      displayLine("\nEnd of \"" + filename + "\"\n");
                       reader.close();
               } catch (IOException x) {
                       System.err.format("IOException: %s%n", x);
@@ -376,7 +372,7 @@ private void displayMessage(String message)
                       BufferedReader reader = new BufferedReader(fileReader);
                       //BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
                       String line = null;
-                      displayLine("Contents of " + filename + "\n");
+                      //displayLine("Contents of \"" + filename + "\"\n");
                       while ((line = reader.readLine()) != null) {
                  	     String []  s = line.split(",");
                              trips = trips + 1;
@@ -385,11 +381,7 @@ private void displayMessage(String message)
                              avgAccom= avgFlights + Float.valueOf(s[3]);
                              avgSkihire= avgSkihire + Float.valueOf(s[5]);
                              avgSkipass= avgSkipass + Float.valueOf(s[4]);
-                             avgCost= avgCost + Float.valueOf(s[11]);
-                             
-                             
-                    	     displayLine(s[0] +"\t" + s[11]);
-                    	     
+                             avgCost= avgCost + Float.valueOf(s[11]);         	     
                       }
                       avgFlights = avgFlights / trips;
                       avgTransfers = avgTransfers / trips;
@@ -397,8 +389,7 @@ private void displayMessage(String message)
                       avgSkipass   = avgSkipass /trips;
                       avgSkihire   = avgSkihire / trips;
                       avgCost      = avgCost / trips;
-                      displayLine ("\n avg " + avgCost + " for " + trips);
-                      displayLine("\nEnd of " + filename + "\n");
+                      //displayLine("\nEnd of \"" + filename + "\"\n");
                       reader.close();
                       SkiTripsReport tripsReport = new SkiTripsReport(trips, avgFlights, avgTransfers,avgAccom,avgSkipass,avgSkihire,avgCost);
                       return tripsReport;
@@ -406,7 +397,7 @@ private void displayMessage(String message)
                       System.err.format("IOException: %s%n", x);
               }
 			return null;
-      } /* end of readFile */
+      } /* end of generateReport */
       
       
 
@@ -516,6 +507,7 @@ private void displayMessage(String message)
    private JMenuItem  readmeItem;   
    private JMenuItem  saveTripItem;
    private JMenuItem  viewTripsItem;
+   private JMenuItem  generateReportItem;
    private JMenuItem  resetItem;   
    private JMenu      helpMenu;
    private JMenu 	  tripMenu;

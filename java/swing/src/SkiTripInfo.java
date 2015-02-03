@@ -1,4 +1,3 @@
-
 public class SkiTripInfo
 {
 	SkiTripInfo(		String location, 

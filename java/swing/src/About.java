@@ -20,8 +20,10 @@ public class About extends JDialog
 
       Box b = Box.createVerticalBox();
       b.add(Box.createGlue());
-      b.add(new JLabel("Calcualte the costs of a ski tropr in Java Swing."));
-	  
+      b.add(new JLabel("Calculate the costs of a ski trip in Java Swing."));
+	  b.add(new JLabel("Display previously entered trip details"));
+	  b.add(new JLabel("Write new trip to a file"));
+	  b.add(new JLabel("Generate a Report on all Trips and store in a file."));
 	  b.add(new JLabel("Author: Conor Gilmer (Webwayz Ltd.)"));
 	  b.add(new JLabel("Version Info: " + applicationVersion));
 
