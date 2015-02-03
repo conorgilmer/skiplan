@@ -188,7 +188,10 @@ public void actionPerformed(ActionEvent evt)
   if (source == Calculate)
 	  {
 	  	 	destination = destinationField.getText();
-	  		flights = Float.valueOf((flightsField.getText()).trim()).floatValue();
+	  	 	if (validInput())
+	  	 	{
+	  	
+	  	 	flights = Float.valueOf((flightsField.getText()).trim()).floatValue();
 	  		transfers = Float.valueOf((transferField.getText()).trim()).floatValue();
 	  		accom = Float.valueOf((accomField.getText()).trim()).floatValue();
 	  		skipass = Float.valueOf((skipassField.getText()).trim()).floatValue();
@@ -209,23 +212,26 @@ public void actionPerformed(ActionEvent evt)
          //  writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
            Reset.setEnabled(true);
            resetItem.setEnabled(true);
-	   
+	  	 	}
 	  }
   else if (source == Save || source == saveTripItem)
 	  {
-           displayLine("Saving to " + dataFile);
+            displayLine("Saving to " + dataFile);
 	  	 	destination = destinationField.getText();
+	  	 	if (validInput())
+	  	 	{
 	  		flights = Float.valueOf((flightsField.getText()).trim()).floatValue();
 	  		transfers = Float.valueOf((transferField.getText()).trim()).floatValue();
 	  		accom = Float.valueOf((accomField.getText()).trim()).floatValue();
 	  		skipass = Float.valueOf((skipassField.getText()).trim()).floatValue();
 	  		skihire = Float.valueOf((skihireField.getText()).trim()).floatValue();
+	  		
 	  		cost = flights + transfers + accom + skipass + skihire;
 	  		SkiTripInfo skiTrip = new SkiTripInfo(destination, flights, transfers, accom, skipass,skihire, 0, 0, 0, 0, 0, cost);
 	  	   // writeToFile(destination + ","+ flights +","+ transfers+","+ accom+","+ skipass+","+skihire+", 0, 0, 0, 0, 0,"+ cost, dataFile);   
 	        writeToFile(skiTrip.csvRecord(), dataFile);
-           Save.setEnabled(false);
-          
+            Save.setEnabled(false);
+	  	 	}
 	  }
   else if(source == viewTripsItem)
   {
@@ -338,9 +344,44 @@ private void displayMessage(String message)
               }
       } /* end of readFile */
 
+   /* validate input values in invalid return false and text in display area and in textfield */   
+   public boolean validInput(){
+ 		if (!isNumber(flightsField.getText())) {
+  	 		displayLine("enter a number in flights field");
+  	 		flightsField.setText("Enter a number");
+  	 		return false; 	 		
+  		} else if (!isNumber(transferField.getText()))	{
+  	 		displayLine("enter a number in transfer field");
+  	 		transferField.setText("Enter a number");
+  	 		return false;
+  		} else if (!isNumber(accomField.getText()))	{
+  	 		displayLine("enter a number in accommodation field");
+  	 		accomField.setText("Enter a number");
+  	 		return false;
+  		} else if (!isNumber(skipassField.getText()))	{
+  	 		displayLine("enter a number in Ski Pass field");
+  	 		skipassField.setText("Enter a number");
+  	 		return false;
+  		} else if (!isNumber(skihireField.getText()))	{
+  	 		displayLine("enter a number in Ski Hire field");
+  	 		skihireField.setText("Enter a number");
+  	 		return false;
+  		}
+  	 		else
+  	 			return true;
 
-
-  
+   } /* end of validInput */
+      
+   /* validate if the number is a float */   
+   private static boolean isNumber(String n) {
+  		try {
+  			//Integer.parseInt(n);
+  			Float.parseFloat(n);
+  			return true;
+  		} catch (NumberFormatException nfe) {
+  			return false;
+  		}
+  	} /* end of isNumber */
 
 
    public void menuSelected(MenuEvent evt)
