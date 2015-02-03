@@ -1,6 +1,6 @@
 #SkiCalcSwing.java
 Pretty basic app
-Java Swing version of adding up ski holiday costs
+Java Swing version of adding up ski holiday costs and listing trips stored on a csv file
 
 >ant clean compile jar run
 
@@ -10,7 +10,7 @@ or
 
 ##To do
 
-+ input validation
++ analysis of compared to previous trips
 + generate breadown chart
 + generate pie chart
 
@@ -20,3 +20,4 @@ or
 + Set up Apache Ant build - with resource bundle bundled in build
 + write to file
 + read from file
++ input validation

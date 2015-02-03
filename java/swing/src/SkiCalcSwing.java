@@ -1,6 +1,8 @@
-// SkiCalcSwing.java
-// by Conor Gilmer (conor.gilmer@gmail.com)
-
+/* SkiCalcSwing.java
+ * list trips stored in a csv file
+ * add a new trip and calculate cost
+ * by Conor Gilmer (conor.gilmer@gmail.com)
+ */
 import java.awt.*;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -75,9 +77,12 @@ public class SkiCalcSwing  extends JFrame
       viewTripsItem = new JMenuItem("View Trips");
       viewTripsItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
       viewTripsItem.setEnabled(true);
-      menuBar.add(makeMenu(helpMenu, new Object[]{ aboutItem, readmeItem, saveTripItem, viewTripsItem, resetItem}, this));
-
+      menuBar.add(makeMenu(helpMenu, new Object[]{ aboutItem, readmeItem}, this));
+      
+      tripMenu = new JMenu("Trips");  
+      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, resetItem}, this));
 	  /** End menu set-up   */
+      
 	  JPanel tripPanel = new JPanel();
 	  tripPanel.setLayout(new GridLayout(0, 2, 5, 5));
 	  tripPanel.setBorder(BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(), "Enter the Details of your Trip"));
@@ -163,7 +168,7 @@ public class SkiCalcSwing  extends JFrame
 	  contentPane.add(tripPanel, "North");
 	  contentPane.add(choicePanel, "South");
 
-   }
+   } /* end of SkiCalcSwing */
 
    public JRadioButton addRadioButton(JPanel p, ButtonGroup g, String name, boolean selected)
    {  JRadioButton button          = new JRadioButton(name, selected);
@@ -262,7 +267,7 @@ public void actionPerformed(ActionEvent evt)
                 saveTripItem.setEnabled(true);
 		displayLine("Reset Input Fields");
 		}
-   }
+   } /* end of Actionperformed*/
 
    @SuppressWarnings("deprecation")
 public static void main(String[] args)
@@ -452,6 +457,7 @@ private void displayMessage(String message)
    private JMenuItem  viewTripsItem;
    private JMenuItem  resetItem;   
    private JMenu      helpMenu;
+   private JMenu 	  tripMenu;
    
    /* display area */
    private JTextArea  resultsTextArea;
