@@ -13,6 +13,7 @@ or
 + analysis of compared to previous trips
 + generate breadown chart
 + generate pie chart
++ add PDF Generator for previous trips(merge with report)
 
 ##Done
 
@@ -22,4 +23,4 @@ or
 + read from file
 + input validation
 + Generate Report and Write to Report file
-+ Added Generate a PDF Report (using PDFBox)
++ Added Generate a PDF Report (using PDFBox pdfbox.1.8.8.jar, apache-commons.jar and fontbox-1.5.0.jar))
