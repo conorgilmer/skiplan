@@ -1,6 +1,21 @@
 <!--  build.xml file  -->
 <!--  Conor Gilmer(cgilmer@tinet.ie)  -->
 <project name="basic build file for ANT" default="all">
+<description>
+     SKi Calc Swing Build
+</description>
+
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib.dir"  location="lib"/>
+
+<path id='compile.classpath'>
+    <fileset dir='lib'>
+       <include name='*.jar'/>
+    </fileset>
+  </path>
+
 
 <!-- Initialize/ Clean up directory for build  -->
 <target name="clean">
@@ -16,7 +31,9 @@
 		<include name="**/*.properties"/>
 	</fileset>
 	</copy>
-	<javac srcdir="src/" destdir="build/classes"/>
+	<javac srcdir="src/" destdir="build/classes">
+<classpath refid='compile.classpath'/>
+</javac>
 </target>
 
 <!--  make jar file from compiled classes -->
@@ -26,7 +43,8 @@
 		<manifest>
 			<attribute name="Main-Class" value="SkiCalcSwing"/>
 		</manifest>
-	</jar>
+    <zipgroupfileset dir="${lib.dir}" includes="*.jar" />
+ </jar>
 </target>
 
 <!--  run execute jar file   -->

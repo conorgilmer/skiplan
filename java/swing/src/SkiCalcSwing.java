@@ -11,9 +11,17 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 
 import javax.swing.*;
 import javax.swing.event.*;
+/* pdf generation classes */
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+
 import java.util.ResourceBundle;
 
 public class SkiCalcSwing  extends JFrame 
@@ -84,10 +92,14 @@ public class SkiCalcSwing  extends JFrame
       generateReportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_MASK));
       generateReportItem.setEnabled(true);
       
+      generatePDFReportItem = new JMenuItem("Generate PDF Report");
+      generatePDFReportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
+      generatePDFReportItem.setEnabled(true);
+      
       menuBar.add(makeMenu(helpMenu, new Object[]{ aboutItem, readmeItem}, this));
       
       tripMenu = new JMenu("Trips");  
-      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, resetItem}, this));
+      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, generatePDFReportItem, resetItem}, this));
 	  /** End menu set-up   */
       
 	  JPanel tripPanel = new JPanel();
@@ -256,6 +268,15 @@ public void actionPerformed(ActionEvent evt)
 	  displayLine(tripsReport.toString());
 	  writeToFile(tripsReport.toString() + "\n", reportFile);
   }
+  
+  else if (source == generatePDFReportItem){
+	  displayLine("generating PDF report");
+	  SkiTripsReport tripsReport = generateReport(dataFile);
+      genPDFReport(tripsReport);
+      
+	  //displayLine(tripsReport.toString());
+	  //writeToFile(tripsReport.toString() + "\n", reportFile);
+  }
 
 	  else if(source == aboutItem)
 	  {
@@ -392,12 +413,75 @@ public static void main(String[] args)
                       //displayLine("\nEnd of \"" + filename + "\"\n");
                       reader.close();
                       SkiTripsReport tripsReport = new SkiTripsReport(trips, avgFlights, avgTransfers,avgAccom,avgSkipass,avgSkihire,avgCost);
+               //       genPDFReport(tripsReport);
                       return tripsReport;
               } catch (IOException x) {
                       System.err.format("IOException: %s%n", x);
               }
 			return null;
       } /* end of generateReport */
+      
+    
+  	public void genPDFReport(SkiTripsReport tReport){
+		String pdfFilename = "skiplanoutput.pdf";
+		//String intext = "in here ya";
+        PDDocument doc = null;
+        PDPage page = null;
+        displayLine("Generate PDF"+ pdfFilename +"\n");
+
+       try{
+           doc = new PDDocument();
+           page = new PDPage();
+
+           //System.out.print("Create PDF Document and Page \n");
+
+           int linesize =25;
+           doc.addPage(page);
+           PDFont font  = PDType1Font.HELVETICA_BOLD;
+           PDFont font1 = PDType1Font.HELVETICA;
+           PDPageContentStream content = new PDPageContentStream(doc, page);
+           content.beginText();
+           content.setFont( font, 12 );
+           content.moveTextPositionByAmount( 100, 700 );
+           content.drawString("**** Ski Holiday Report ****\n ");
+           content.endText();
+
+           BufferedReader reader = new BufferedReader(new StringReader(tReport.toString()));
+           reader.readLine();
+           
+           String line = null;
+           while ((line = reader.readLine()) != null) {
+            	
+           linesize = linesize + 20;
+           content.beginText();
+           content.setFont( font1, 12 );
+           content.moveTextPositionByAmount( 100, 700 - linesize );
+           content.drawString(line);
+           content.endText();
+           }
+           
+           linesize = linesize + 25;
+           content.beginText();
+           content.setFont( font, 12 );
+           content.moveTextPositionByAmount( 100, 700 - linesize );
+           content.drawString("**** End of Ski Holiday Report ****\n ");
+           content.endText();
+           
+           content.close();
+           
+           
+           
+           
+           
+           
+           //System.out.print("Writing to " + pdfFilename);
+          doc.save(pdfFilename);
+          doc.close();
+          displayLine("File \""+ pdfFilename +"\" written.");
+    } catch (Exception e){
+        System.out.println(e);
+    }
+	}
       
       
 
@@ -508,6 +592,7 @@ public static void main(String[] args)
    private JMenuItem  saveTripItem;
    private JMenuItem  viewTripsItem;
    private JMenuItem  generateReportItem;
+   private JMenuItem  generatePDFReportItem;
    private JMenuItem  resetItem;   
    private JMenu      helpMenu;
    private JMenu 	  tripMenu;
