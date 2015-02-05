@@ -5,6 +5,7 @@
  */
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.*;
 /* pdf generation classes */
@@ -21,6 +23,8 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
+import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 
 import java.util.ResourceBundle;
 
@@ -439,7 +443,31 @@ public static void main(String[] args)
            doc.addPage(page);
            PDFont font  = PDType1Font.HELVETICA_BOLD;
            PDFont font1 = PDType1Font.HELVETICA;
+           
+           Image image = ImageIO.read(new File("logo.png"));
+           BufferedImage bufferedImage = (BufferedImage) image;
+           
+           PDXObjectImage ximage = new PDPixelMap(doc, bufferedImage);
+
+   //       PDPageContentStream contentStream = new PDPageContentStream(document,page, true, true, true);
+
+           //Calculate the image display ratio
+           float width = PDPage.PAGE_SIZE_A4.getWidth()-30;
+           float displayRatio = (float)width/bufferedImage.getWidth();
+       //    float w=(float)(bufferedImage.getWidth()*displayRatio);
+       //    float h=(float)(bufferedImage.getHeight()*displayRatio);
+           
            PDPageContentStream content = new PDPageContentStream(doc, page);
+           
+           content.beginText();
+           // set font and font size
+           content.setFont( font, 15);
+           content.moveTextPositionByAmount(100, 750);
+           content.drawString( "Report");
+           content.endText();
+           
+           content.drawImage(ximage, 300, 650);
+
            content.beginText();
            content.setFont( font, 12 );
            content.moveTextPositionByAmount( 100, 700 );
