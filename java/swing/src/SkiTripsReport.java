@@ -56,7 +56,7 @@ public class SkiTripsReport
         /* float to euro convert float to string currency formatted for displaying on screen*/
         public String floattoeuro(double avgCost2){
         	
-        		String str = String.format("Û%.02f", avgCost2);
+        		String str = String.format("%.02f euro", avgCost2);
         		return str;
         
         } /* end of floattoeuro */
