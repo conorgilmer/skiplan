@@ -24,4 +24,5 @@ or
 + input validation
 + Generate Report and Write to Report file
 + Added Simple Bar Chart of Costs for each trip
++ Added Simple line Chart of Costs for each trip
 + Added Generate a PDF Report (using PDFBox pdfbox.1.8.8.jar, apache-commons.jar and fontbox-1.5.0.jar))
