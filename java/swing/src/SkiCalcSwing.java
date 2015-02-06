@@ -26,6 +26,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDPixelMap;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class SkiCalcSwing  extends JFrame 
@@ -48,6 +49,9 @@ public class SkiCalcSwing  extends JFrame
 	public ResourceBundle res = ResourceBundle.getBundle("STI"); /* some default values */
     public String dataFile    = "skidata.csv";
     public String reportFile  = "report.csv";
+    
+	public Color[] defcolours = {Color.green,Color.blue,Color.red, Color.gray, Color.magenta, Color.cyan, Color.orange, Color.yellow};
+
     
    public SkiCalcSwing () 
    {
@@ -99,11 +103,15 @@ public class SkiCalcSwing  extends JFrame
       generatePDFReportItem = new JMenuItem("Generate PDF Report");
       generatePDFReportItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
       generatePDFReportItem.setEnabled(true);
+  
+      barChartItem = new JMenuItem("Bar Chart");
+      barChartItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_MASK));
+      barChartItem.setEnabled(true);
       
       menuBar.add(makeMenu(helpMenu, new Object[]{ aboutItem, readmeItem}, this));
       
       tripMenu = new JMenu("Trips");  
-      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, generatePDFReportItem, resetItem}, this));
+      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, generatePDFReportItem, barChartItem, resetItem}, this));
 	  /** End menu set-up   */
       
 	  JPanel tripPanel = new JPanel();
@@ -282,6 +290,27 @@ public void actionPerformed(ActionEvent evt)
 	  //writeToFile(tripsReport.toString() + "\n", reportFile);
   }
 
+
+  else if(source == barChartItem)
+  {
+	     displayLine("Bar Charting");
+	     readDataFileGenBarChart(dataFile);
+	     
+	 /*    String barChartTitle = "Ski Trip Bar Chart";
+	     double[] yNumbers = {296,1100,889, 956, 1055};
+	     int elmt = yNumbers.length;
+		 String[] xItems = {"2006","2007","2009","2010","2015"};
+		 Color [] colours = new Color[elmt];
+		 for (int i=0; i<elmt; i++)
+		    {
+		      colours[i] = defcolours[i];
+		    }
+		  SimpleBarChart.main(yNumbers, xItems, colours, barChartTitle, 500, 400);
+*/
+	  
+	  
+  }
+  
 	  else if(source == aboutItem)
 	  {
 		  new About(this).show();
@@ -444,16 +473,15 @@ public static void main(String[] args)
            PDFont font  = PDType1Font.HELVETICA_BOLD;
            PDFont font1 = PDType1Font.HELVETICA;
            
+            // adding an image to pdfbox output
            Image image = ImageIO.read(new File("logo.png"));
            BufferedImage bufferedImage = (BufferedImage) image;
            
            PDXObjectImage ximage = new PDPixelMap(doc, bufferedImage);
 
-   //       PDPageContentStream contentStream = new PDPageContentStream(document,page, true, true, true);
-
            //Calculate the image display ratio
-           float width = PDPage.PAGE_SIZE_A4.getWidth()-30;
-           float displayRatio = (float)width/bufferedImage.getWidth();
+        //   float width = PDPage.PAGE_SIZE_A4.getWidth()-30;
+       //    float displayRatio = (float)width/bufferedImage.getWidth();
        //    float w=(float)(bufferedImage.getWidth()*displayRatio);
        //    float h=(float)(bufferedImage.getHeight()*displayRatio);
            
@@ -511,7 +539,63 @@ public static void main(String[] args)
     }
 	}
       
-      
+     
+  	
+    /* read from a file and generate a bar chart */
+    private void readDataFileGenBarChart(String filename) {
+            try {
+            	
+            	    ArrayList<Double> yList = new ArrayList<Double>();
+            	    ArrayList<String> xList = new ArrayList<String>();
+            		//int row =0;
+                    File dataFile         = new File(filename);
+                    FileReader fileReader = new FileReader(dataFile);
+                    BufferedReader reader = new BufferedReader(fileReader);
+                    //BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+                    String line = null;
+                    displayLine("Contents of \"" + filename + "\"\n");
+                    /* Headings */
+           	      displayLine("Resort\tFlights\tTransfers\tHotel\tSki pass\tSki hire\tTotal" );
+                    while ((line = reader.readLine()) != null) {
+                           //displayLine(line);
+                  	     String []  s = line.split(",");
+                  	     displayLine(s[0] +"\t"+ s[1] +"\t"+s[2] +"\t" +s[3] +"\t" +s[4] +"\t" +s[5] +"\t" + s[11]);
+                
+                  	     xList.add(s[0]);
+                  	     yList.add(Double.valueOf(s[11])); 
+                  	     //row++;
+                    }
+                	double [] yNumbers = new double[yList.size()];
+            		String [] xItems = new String[xList.size()];
+            	    
+            	    for(int j =0;j<yList.size();j++){
+            			  yNumbers[j] = yList.get(j);
+            			  xItems[j] =xList.get(j);
+            			}
+            	    
+            	    
+                    displayLine("\nEnd of \"" + filename + "\"\n");
+                    reader.close();
+  
+           	     String barChartTitle = "Ski Trip Bar Chart";
+        	      int elmt = yNumbers.length;
+        		 Color [] colours = new Color[elmt];
+        		 for (int i=0; i<elmt; i++)
+        		    {
+        		      colours[i] = defcolours[i];
+        		    }
+        		  SimpleBarChart.main(yNumbers, xItems, colours, barChartTitle, 500, 400);
+                    
+                    
+                    
+            } catch (IOException x) {
+                    System.err.format("IOException: %s%n", x);
+            }
+    } /* end of readFileGenBarChart */
+  	
+  	
+  	
+  	
 
    /* validate input values in invalid return false and text in display area and in textfield */   
    public boolean validInput(){
@@ -622,6 +706,7 @@ public static void main(String[] args)
    private JMenuItem  generateReportItem;
    private JMenuItem  generatePDFReportItem;
    private JMenuItem  resetItem;   
+   private JMenuItem  barChartItem;
    private JMenu      helpMenu;
    private JMenu 	  tripMenu;
    
