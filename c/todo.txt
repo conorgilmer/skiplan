@@ -1,0 +1,8 @@
+todo
+----
+
+read from file
+generate results
+accpet input new record
+add new record to csv file
+seleciton menu
