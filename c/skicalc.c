@@ -17,6 +17,16 @@ void writeRecord(char[], float, float, float, float,float, float, float, int, fl
 
 void readRecords(void)
 {
+	int   records     = 0;
+	float tFlights    = 0;
+	float tTransfers  = 0;
+	float tAccom      = 0;
+	float tPass       = 0;
+	float tHire       = 0;
+	float tLessons    = 0;
+	float tInsurance  = 0;
+	float tCost       = 0;
+	
 	char** colitems;
         FILE *ptr_file;
         char buf[1000];
@@ -27,12 +37,21 @@ void readRecords(void)
 	else {
                 printf("\nResort\tFlights\tConn\tAccomm\tSkipass\tSkihire\tTotal\n\n");
         while (fgets(buf,1000, ptr_file)!=NULL)
-        {
+        {	
+		records++;
                 colitems = str_split(buf, ',');
                 printf("%s\t%s\t%s\t%s\t%s\t%s\t%s", colitems[0],colitems[1],colitems[2],colitems[3],colitems[4],colitems[5],colitems[11]);
+
+		tFlights   = tFlights   + atof(colitems[1]);
+		tTransfers = tTransfers + atof(colitems[2]);
+		tAccom     = tAccom     + atof(colitems[3]);
+		tPass      = tPass      + atof(colitems[4]);
+		tHire      = tHire      + atof(colitems[5]);
+		tCost      = tCost      + atof(colitems[11]);
         }
         fclose(ptr_file);
 
+        printf("\n\nAvg.\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n\n", tFlights/records, tTransfers/records, tAccom/records, tPass/records, tHire/records, tCost/records);
 	}
 }
 
@@ -63,13 +82,10 @@ void addRecord(void)
     printf("\n");
 
     // get input for costs
-    //location = getInputString("Where is the trip to");
-    printf("\nWhere is the trip to?");
     location = getInputStr("Where are you going?");
     printf("location = %s \n", location);
     flights = getInput("Flights");
     connection = getInput("Connection"); 
-   // printf(" the returnd value is %s\n", connection);
     accommodation = getInput("accommodation");
     skipass = getInput("ski pass");
     skihire = getInput("ski hire");
@@ -102,6 +118,7 @@ void addRecord(void)
 	free(location);
 } /* end of addRecord */
 
+
 void writeRecord(char place[10], float flight, float con, float acc, float pass, float hire, float lessons, float insurance, int days, float daily, float weekly, float tot)
 {
    FILE *fp;
@@ -111,13 +128,12 @@ void writeRecord(char place[10], float flight, float con, float acc, float pass,
   // fputs("This is testing for fputs...\n", fp);
    fclose(fp);
 
-}
-
-
+   printf("*** Record Saved to file ***\n");
+} /* end of writeRecord */
 
 
 char mainMenu(void) {
-	char ch ='c';
+    char ch ='c';
     printf("*************************************\n");
     printf("*                                   *\n");
     printf("*       Ski Trip Calculator         *\n");
@@ -132,7 +148,8 @@ char mainMenu(void) {
     scanf("%c", &ch);
 
     return ch;
-}
+} /* end of mainMenu */
+
 
 int main(void) {
 	char choice = 'r';
@@ -141,11 +158,11 @@ int main(void) {
 	if (choice == '1') {
         addRecord();}
 	else if (choice =='2') {
-		printf("view\n");
+		printf("*** View Trips ***\n");
 		readRecords();
 	}
 	} while ( choice != '0');
 
 
 	return 0;
-}
+} /* end of main */
