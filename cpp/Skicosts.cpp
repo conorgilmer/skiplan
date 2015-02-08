@@ -44,19 +44,24 @@ int main() {
 	// output total
 	cout << "Total Cost  for your trip to " << location << " will be  " << total << " euro.\n";
 
+	// save ski trip to file
 	char dl =',';
     ofstream fout(FILENAME, ios::app);
     fout << location <<dl<<flights<<dl<<transfers<<dl<<accom<<dl<<skipass<<dl<<skihire<<endl;
     //close file
     fout.close();
+    cout << "Skitrip written to \"" << FILENAME << "\"";
     cout << endl;
+
+    // display stored skitrips
+    cout << "Ski Trips" <<endl;
     ifstream fin(FILENAME);
     char ch;
     while (fin.get(ch))
         cout << ch;
     fin.close();
 
-
+    cout << "End of Ski Trips" << endl;
 
 	return 0;
 }
