@@ -7,8 +7,11 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
+
+const char *FILENAME = "data.csv";
 
 int main() {
 
@@ -39,7 +42,22 @@ int main() {
 	total = flights + transfers + accom + skipass + skihire;
 
 	// output total
-	cout << "Total Cost will be  " << total << " euro.\n";
+	cout << "Total Cost  for your trip to " << location << " will be  " << total << " euro.\n";
+
+	char dl =',';
+    ofstream fout(FILENAME, ios::app);
+    fout << location <<dl<<flights<<dl<<transfers<<dl<<accom<<dl<<skipass<<dl<<skihire<<endl;
+    //close file
+    fout.close();
+    cout << endl;
+    ifstream fin(FILENAME);
+    char ch;
+    while (fin.get(ch))
+        cout << ch;
+    fin.close();
+
+
+
 	return 0;
 }
 
