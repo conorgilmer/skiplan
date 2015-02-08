@@ -16,7 +16,7 @@ void writeRecord(char[], float, float, float, float,float, float, float, int, fl
 
 
 void readRecords(void)
-{
+{	SkiTrip skiTrip;
 	int   records     = 0;
 	float tFlights    = 0;
 	float tTransfers  = 0;
@@ -40,6 +40,7 @@ void readRecords(void)
         {	
 		records++;
                 colitems = str_split(buf, ',');
+		skiTrip.total = atof(colitems[11]);
                 printf("%s\t%s\t%s\t%s\t%s\t%s\t%s", colitems[0],colitems[1],colitems[2],colitems[3],colitems[4],colitems[5],colitems[11]);
 
 		tFlights   = tFlights   + atof(colitems[1]);
