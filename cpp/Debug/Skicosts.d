@@ -1,1 +1,0 @@
-Skicosts.d: ../Skicosts.cpp
