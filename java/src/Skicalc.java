@@ -90,13 +90,64 @@ public final class Skicalc {
     			String line = null;
 			display("Contents of " + filename + "\n");
     			while ((line = reader.readLine()) != null) {
-        			display(line);
+        //			display(line);
+			     String []  s = line.split(",");
+                    	     display(s[0] +"\t"+ s[1] +"\t"+s[2] +"\t" +s[3] +"\t" +s[4] +"\t" +s[5]+"\t"+s[11]);
+
     			}
 			display("\nEnd of " + filename + "\n");
 		} catch (IOException x) {
     			System.err.format("IOException: %s%n", x);
 		}
 	} /* end of readFile */
+
+
+	/* read from a file and print dtats on screen */
+	private static void readandcalcFile(String filename) {
+		double avgFlights   = 0;
+		double avgTransfers = 0;
+		double avgAccom     = 0;
+		double avgSkipass   = 0;
+		double avgSkihire   = 0;
+		double avgTotals    = 0;
+		int    trips        = 0;
+		try {
+            		File dataFile         = new File(filename);
+			FileReader fileReader = new FileReader(dataFile);
+			BufferedReader reader = new BufferedReader(fileReader);
+			//BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
+    			String line = null;
+			display("Contents of " + filename + "\n");
+    			while ((line = reader.readLine()) != null) {
+        //			display(line);
+				trips++;
+			     String []  s = line.split(",");
+                    	     display(s[0] +"\t"+ s[1] +"\t"+s[2] +"\t" +s[3] +"\t" +s[4] +"\t" +s[5]+"\t"+s[11]);
+			avgFlights   = avgFlights + Double.valueOf(s[1]);
+			avgTransfers = avgTransfers + Double.valueOf(s[2]);
+			avgAccom = avgAccom + Double.valueOf(s[3]);
+			avgSkipass = avgSkipass + Double.valueOf(s[4]);
+			avgSkihire = avgSkihire + Double.valueOf(s[5]);
+			avgTotals = avgTotals + Double.valueOf(s[11]);
+    			}
+			display("\n Averages = " + floattoeuro(avgFlights/trips) + "\t" +floattoeuro(avgTransfers/trips) +"\t" +floattoeuro(avgAccom/trips) + "\t" + floattoeuro(avgSkipass/trips)+ "\t"+floattoeuro(avgSkihire/trips) +"\t" + floattoeuro(avgTotals/trips) + "\n" );
+			display("\nEnd of " + filename + "\n");
+		} catch (IOException x) {
+    			System.err.format("IOException: %s%n", x);
+		}
+	} /* end of readFile */
+
+
+     
+        /* float to euro convert float to string currency formatted for displaying on screen*/
+        public static String floattoeuro(double avgCost2){
+        	
+        		String str = String.format("%.02f", avgCost2);
+        		return str;
+        
+        } /* end of floattoeuro */
+
+
 
 	private static void addTrip(String filename) {
 		location = getDescription("Where is the trip to");
@@ -114,6 +165,9 @@ public final class Skicalc {
 		total = flights + connection + accommodation + skihire + skipass + lessons + insurance +weeklyspend;
 		display("The Total Cost is ");
 		displayf(total);
+	
+		SkiTripInfo tripInfo = new SkiTripInfo(location, flights, connection, accommodation, skihire, skipass, lessons, insurance, days, dailyspend, weeklyspend, total);
+
 		writeToFile(location +","
 			 +flights+","
 			 +connection+","
@@ -127,6 +181,7 @@ public final class Skicalc {
 			 +weeklyspend+","
 			 + total +",\n", outputFile);
 		display("\n *** End of Add Trip *** \n");
+		display(tripInfo.toString());
 	} /* end of addTrip */
 
 
@@ -140,6 +195,7 @@ public final class Skicalc {
 		display("\n");
 		display("1. Add Trip\n");
 		display("2. View Trips\n");
+		display("3. Calculate Averages for Trips\n");
 		display("0. Exit\n");
 		display("Select ?");
 		input = scanner.next();
@@ -151,6 +207,9 @@ public final class Skicalc {
 			break;
 		case 2:
 			readFile(outputFile);
+			break;
+		case 3:
+			readandcalcFile(outputFile);
 			break;
 		case 0:
 			display("go again\n");
