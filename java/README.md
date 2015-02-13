@@ -16,4 +16,5 @@ using apache ant to compile, build and run - see build.xml
 + add days and insurance and lessons(done)
 + add add a description trip name location (done)
 + add dialog select view trip or add trip (done)
++ added calculate averages
 + swing application (done)
