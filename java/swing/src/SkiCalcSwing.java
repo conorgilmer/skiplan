@@ -107,11 +107,16 @@ public class SkiCalcSwing  extends JFrame
       barChartItem = new JMenuItem("Bar Chart");
       barChartItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_MASK));
       barChartItem.setEnabled(true);
+ 
+      lineChartItem = new JMenuItem("Line Chart");
+      lineChartItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
+      lineChartItem.setEnabled(true);
+  
       
       menuBar.add(makeMenu(helpMenu, new Object[]{ aboutItem, readmeItem}, this));
       
       tripMenu = new JMenu("Trips");  
-      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, generatePDFReportItem, barChartItem, resetItem}, this));
+      menuBar.add(makeMenu(tripMenu, new Object[]{viewTripsItem, saveTripItem, generateReportItem, generatePDFReportItem, barChartItem, lineChartItem, resetItem}, this));
 	  /** End menu set-up   */
       
 	  JPanel tripPanel = new JPanel();
@@ -272,6 +277,9 @@ public void actionPerformed(ActionEvent evt)
   else if(source == viewTripsItem)
   {
 	  readDataFile(dataFile);
+	  SkiTripsReport str = generateReport(dataFile);
+	  displayLine("\n" +str.toLine());
+
 	  Save.setEnabled(true);
   }
   else if (source == Report || source == generateReportItem){
@@ -295,22 +303,17 @@ public void actionPerformed(ActionEvent evt)
   {
 	     displayLine("Bar Charting");
 	     readDataFileGenBarChart(dataFile);
-	     
-	 /*    String barChartTitle = "Ski Trip Bar Chart";
-	     double[] yNumbers = {296,1100,889, 956, 1055};
-	     int elmt = yNumbers.length;
-		 String[] xItems = {"2006","2007","2009","2010","2015"};
-		 Color [] colours = new Color[elmt];
-		 for (int i=0; i<elmt; i++)
-		    {
-		      colours[i] = defcolours[i];
-		    }
-		  SimpleBarChart.main(yNumbers, xItems, colours, barChartTitle, 500, 400);
-*/
-	  
 	  
   }
-  
+
+
+  else if(source == lineChartItem)
+  {
+	     displayLine("Line Charting");
+	     //readDataFileGenBarChart(dataFile);
+	     DrawGraph.main(null);
+	  
+  }
 	  else if(source == aboutItem)
 	  {
 		  new About(this).show();
@@ -707,6 +710,7 @@ public static void main(String[] args)
    private JMenuItem  generatePDFReportItem;
    private JMenuItem  resetItem;   
    private JMenuItem  barChartItem;
+   private JMenuItem  lineChartItem;
    private JMenu      helpMenu;
    private JMenu 	  tripMenu;
    
