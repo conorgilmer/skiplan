@@ -105,7 +105,7 @@ void addRecord(void)
     printf("Connection cost:     %5.2f Euro\n\a", connection);
     printf("Accommodation cost:  %5.2f Euro\n\a", accommodation);
     printf("Skipass cost:        %5.2f Euro\n\a", skipass);
-    printf("Skishire cost:       %5.2f Euro\n\a", skihire);
+    printf("Ski hire cost:       %5.2f Euro\n\a", skihire);
     printf("Ski lessons cost:    %5.2f Euro\n\a", skilessons);
     printf("Ski insurance cost:  %5.2f Euro\n\a", skiinsurance);
     printf("Daily spend %d days: %5.2f Euro\n\a", days, dailyspend);
@@ -155,13 +155,13 @@ char mainMenu(void) {
 int main(void) {
 	char choice = 'r';
 	do {	
-	choice = mainMenu();
-	if (choice == '1') {
-        addRecord();}
-	else if (choice =='2') {
-		printf("*** View Trips ***\n");
-		readRecords();
-	}
+		choice = mainMenu();
+		if (choice == '1') {
+	       		addRecord();}
+		else if (choice =='2') {
+			printf("*** View Trips ***\n");
+			readRecords();
+		}
 	} while ( choice != '0');
 
 
