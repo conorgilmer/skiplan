@@ -10,6 +10,7 @@
 
 
 void addRecord(void);
+void genReport(void);
 char mainManu(void);
 void readRecords(void);
 void writeRecord(char[], float, float, float, float,float, float, float, int, float,float,float);
@@ -26,7 +27,23 @@ void readRecords(void)
 	float tLessons    = 0;
 	float tInsurance  = 0;
 	float tCost       = 0;
-	
+	float minCost     = 100000;
+	float minFlights  = 100000;
+	float minTrans    = 100000;
+	float minAccom    = 100000;
+	float minPass     = 100000;
+	float minHire     = 100000;
+	float minLessons  = 100000;
+	float minIns      = 100000;
+	float maxCost     = 0;
+	float maxFlights  = 0;
+	float maxTrans    = 0;
+	float maxAccom    = 0;
+	float maxPass     = 0;
+	float maxHire     = 0;
+	float maxLessons  = 0;
+	float maxIns      = 0;
+	float vari = 0.0;
 	char** colitems;
         FILE *ptr_file;
         char buf[1000];
@@ -49,14 +66,69 @@ void readRecords(void)
 		tPass      = tPass      + atof(colitems[4]);
 		tHire      = tHire      + atof(colitems[5]);
 		tCost      = tCost      + atof(colitems[11]);
+	       	
+	       	
+		vari = atof(colitems[1]);
+		if ( vari < minFlights) {
+			minFlights = vari;
+		}
+		if ( vari > maxFlights) {
+			maxFlights = vari;
+		}
+	       	
+		vari = atof(colitems[2]);
+		if ( vari < minTrans) {
+			minTrans = vari;
+		}
+		if ( vari > maxTrans) {
+			maxTrans = vari;
+		}
+	       	
+		vari = atof(colitems[3]);
+		if ( vari < minAccom) {
+			minAccom = vari;
+		}
+		if ( vari > maxAccom) {
+			maxAccom = vari;
+		}
+	       	
+		vari = atof(colitems[4]);
+		if ( vari < minPass) {
+			minPass = vari;
+		}
+		if ( vari > maxPass) {
+			maxPass = vari;
+		}
+	       	
+		vari = atof(colitems[5]);
+		if ( vari < minHire) {
+			minHire = vari;
+		}
+		if ( vari > maxHire) {
+			maxHire = vari;
+		}
+	       	
+		vari = atof(colitems[11]);
+		if ( vari < minCost) {
+			minCost = vari;
+		}
+		if ( vari > maxCost) {
+			maxCost = vari;
+		}
         }
         fclose(ptr_file);
 
-        printf("\n\nAvg.\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n\n", tFlights/records, tTransfers/records, tAccom/records, tPass/records, tHire/records, tCost/records);
+        printf("\n\nAvg.\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", tFlights/records, tTransfers/records, tAccom/records, tPass/records, tHire/records, tCost/records);
+        printf("Min.\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n", minFlights, minTrans, minAccom, minPass, minHire, minCost);
+        printf("Max.\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n\n", maxFlights, maxTrans, maxAccom, maxPass, maxHire, maxCost);
 	}
 }
 
 
+void genReport(void)
+{
+	printf("Generate Report\n ");
+}
 void addRecord(void)
 {
     // Local Declarations
@@ -154,13 +226,20 @@ char mainMenu(void) {
 
 int main(void) {
 	char choice = 'r';
+	int num = 0;
 	do {	
+		num++;
+//		printf("\n run %d", num);
 		choice = mainMenu();
 		if (choice == '1') {
 	       		addRecord();}
 		else if (choice =='2') {
 			printf("*** View Trips ***\n");
 			readRecords();
+		}
+		else if (choice =='3') {
+			printf("*** Generate Report ***\n");
+			genReport();
 		}
 	} while ( choice != '0');
 
