@@ -41,6 +41,6 @@ mint =1000
 END { 
 	printf "\n\tAverage:\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n\n", sum2/n, sum3/n, sum4/n, sum5/n, sum6/n, sumt/n 
 
-	printf "\tMinimun: \t %.2f\t %.2f\t %.2f\t %.2f\t %.2f\t%.2f\n", min2, min3,min4,min5,min6,mint;
-	printf "\tMaximun: \t %.2f\t %.2f\t %.2f\t %.2f\t %.2f\t%.2f\n", max2, max3,max4,max5,max6,maxt;
+	printf "\tMinimum: \t %.2f\t %.2f\t %.2f\t %.2f\t %.2f\t%.2f\n", min2, min3,min4,min5,min6,mint;
+	printf "\tMaximum: \t %.2f\t %.2f\t %.2f\t %.2f\t %.2f\t%.2f\n", max2, max3,max4,max5,max6,maxt;
 }
