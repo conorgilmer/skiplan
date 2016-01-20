@@ -7,7 +7,7 @@ using apache ant to compile, build and run - see build.xml
 + add breakdown in skipack hire helmet boots poles skis
 + set up skitrip object
 + use currency class
-
++ graph pie and bar breakdown of costs
 
 ##Recent Additions
 
