@@ -89,6 +89,7 @@ public final class Skicalc {
 			//BufferedReader reader = new BufferedReader(new FileReader(new File(filename)));
     			String line = null;
 			display("Contents of " + filename + "\n");
+                    	     display("Resort\tFlights\tConnection\tAccommodation\tPass\tPack\tTotal");
     			while ((line = reader.readLine()) != null) {
         //			display(line);
 			     String []  s = line.split(",");
